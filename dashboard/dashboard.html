@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Network Traffic Security Dashboard</title>
+
+<style>
+
+/* =====================================================
+   GLOBAL
+   ===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #070c17;
+    color: #f3f7ff;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.header {
+    padding: 26px 32px;
+    background: #0f1727;
+    border-bottom: 1px solid #27354d;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 31px;
+    letter-spacing: -0.5px;
+}
+
+.header p {
+    margin: 9px 0 0;
+    color: #89a8d3;
+    font-size: 15px;
+}
+
+.privacy-button {
+    border: 1px solid #344766;
+    background: #162237;
+    color: #b8cbea;
+    padding: 10px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.privacy-button:hover {
+    background: #1b2a43;
+}
+
+
+/* =====================================================
+   CONTAINER
+   ===================================================== */
+
+.container {
+    padding: 30px;
+    max-width: 1700px;
+    margin: 0 auto;
+}
+
+
+/* =====================================================
+   TITLES
+   ===================================================== */
+
+.section-title {
+    margin: 0 0 18px;
+    font-size: 23px;
+}
+
+.panel-title {
+    margin: 0 0 22px;
+    font-size: 21px;
+}
+
+
+/* =====================================================
+   OVERVIEW CARDS
+   ===================================================== */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.card {
+    background: #10192a;
+    border: 1px solid #263550;
+    border-radius: 14px;
+    padding: 22px;
+}
+
+.card-label {
+    color: #89a9d4;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.card-value {
+    margin-top: 11px;
+    font-size: 31px;
+    font-weight: bold;
+}
+
+.card-description {
+    margin-top: 7px;
+    color: #708cb5;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   GENERAL GRIDS
+   ===================================================== */
+
+.two-column {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 22px;
+    margin-bottom: 22px;
+}
+
+.two-equal {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin-bottom: 22px;
+}
+
+
+/* =====================================================
+   PANELS
+   ===================================================== */
+
+.panel {
+    background: #10192a;
+    border: 1px solid #263550;
+    border-radius: 14px;
+    padding: 26px;
+}
+
+
+/* =====================================================
+   PROTOCOL BARS
+   ===================================================== */
+
+.protocol-row {
+    margin-bottom: 19px;
+}
+
+.protocol-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.protocol-name {
+    color: #eef4ff;
+}
+
+.protocol-value {
+    color: #8da9cf;
+}
+
+.progress {
+    width: 100%;
+    height: 11px;
+    background: #1d2940;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background: #63a9ff;
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+
+/* =====================================================
+   SECURITY
+   ===================================================== */
+
+.security-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 0;
+    border-bottom: 1px solid #243149;
+}
+
+.security-row:last-child {
+    border-bottom: none;
+}
+
+.security-name {
+    font-size: 15px;
+    color: #edf3ff;
+}
+
+.badge {
+    min-width: 62px;
+    text-align: center;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-ok {
+    background: #0a3b2a;
+    color: #55e7a3;
+}
+
+.badge-alert {
+    background: #4a350e;
+    color: #ffd36c;
+}
+
+.badge-info {
+    background: #153b5c;
+    color: #79c5ff;
+}
+
+
+/* =====================================================
+   SECURITY SUMMARY BOX
+   ===================================================== */
+
+.security-summary {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #2a3d5b;
+    border-radius: 10px;
+    background: #0c1423;
+}
+
+.security-summary-title {
+    color: #8eacd6;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.7px;
+}
+
+.security-summary-text {
+    margin-top: 7px;
+    color: #e7eefb;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   CHARTS
+   ===================================================== */
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 310px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* =====================================================
+   TABLE
+   ===================================================== */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #26344d;
+}
+
+th {
+    color: #8faad1;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+td {
+    color: #edf3fc;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #172337;
+}
+
+
+/* =====================================================
+   METADATA
+   ===================================================== */
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.metadata-item {
+    background: #0c1423;
+    border: 1px solid #233149;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.metadata-label {
+    color: #7f9bc4;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.metadata-value {
+    margin-top: 7px;
+    color: #e9f0fc;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+
+/* =====================================================
+   NOTE
+   ===================================================== */
+
+.note {
+    margin-top: 18px;
+    color: #738db2;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.footer {
+    margin-top: 10px;
+    padding: 22px 30px;
+    color: #637fa8;
+    border-top: 1px solid #26344d;
+    text-align: center;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1250px) {
+
+    .cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metadata-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 950px) {
+
+    .two-column,
+    .two-equal {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .container {
+        padding: 16px;
+    }
+
+    .header {
+        padding: 20px;
+    }
+
+    .header-top {
+        flex-direction: column;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .metadata-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     LOAD C++ DATA
+     ===================================================== -->
+
+<script src="analysis.js"></script>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div class="header">
+
+    <div class="header-top">
+
+        <div>
+
+            <h1>
+                Network Traffic Security Dashboard
+            </h1>
+
+            <p>
+                Wireshark / TShark Packet Analysis
+                • traffic_capture.pcapng
+            </p>
+
+        </div>
+
+
+        <button
+            class="privacy-button"
+            id="privacyButton"
+            onclick="togglePrivacyMode()">
+
+            Privacy Mode: OFF
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     TRAFFIC OVERVIEW
+     ===================================================== -->
+
+<h2 class="section-title">
+    Traffic Overview
+</h2>
+
+
+<div class="cards">
+
+
+    <div class="card">
+
+        <div class="card-label">
+            Total Packets
+        </div>
+
+        <div
+            class="card-value"
+            id="totalPackets">
+            -
+        </div>
+
+        <div class="card-description">
+            Packets analyzed
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-label">
+            TCP Traffic
+        </div>
+
+        <div
+            class="card-value"
+            id="tcpPackets">
+            -
+        </div>
+
+        <div
+            class="card-description"
+            id="tcpPercentage">
+            -
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-label">
+            UDP Traffic
+        </div>
+
+        <div
+            class="card-value"
+            id="udpPackets">
+            -
+        </div>
+
+        <div
+            class="card-description"
+            id="udpPercentage">
+            -
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-label">
+            DNS Traffic
+        </div>
+
+        <div
+            class="card-value"
+            id="dnsPackets">
+            -
+        </div>
+
+        <div class="card-description">
+            DNS packets
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-label">
+            Review Indicators
+        </div>
+
+        <div
+            class="card-value"
+            id="indicatorCount">
+            -
+        </div>
+
+        <div class="card-description">
+            Configured indicators requiring review
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     PROTOCOL + SECURITY
+     ===================================================== -->
+
+<div class="two-column">
+
+
+    <!-- PROTOCOL ACTIVITY -->
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Protocol Activity
+        </h2>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    TCP
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="tcpProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="tcpBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    UDP
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="udpProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="udpBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    TLS
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="tlsProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="tlsBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    DNS
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="dnsProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="dnsBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    HTTP
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="httpProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="httpBar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="protocol-row">
+
+            <div class="protocol-header">
+
+                <span class="protocol-name">
+                    ICMPv6
+                </span>
+
+                <span
+                    class="protocol-value"
+                    id="icmpv6ProtocolValue">
+                    -
+                </span>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-fill"
+                    id="icmpv6Bar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="note">
+
+            Protocol percentages may overlap because
+            higher-layer protocols can be encapsulated
+            within TCP/UDP traffic.
+
+        </div>
+
+    </div>
+
+
+    <!-- SECURITY MONITORING -->
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Security Monitoring
+        </h2>
+
+
+        <div class="security-row">
+
+            <span class="security-name">
+                TCP Retransmissions
+            </span>
+
+            <span
+                class="badge badge-alert"
+                id="retransmissions">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="security-row">
+
+            <span class="security-name">
+                TCP Resets
+            </span>
+
+            <span
+                class="badge badge-alert"
+                id="tcpResets">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="security-row">
+
+            <span class="security-name">
+                TCP Port Scan
+            </span>
+
+            <span
+                class="badge"
+                id="portScan">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="security-row">
+
+            <span class="security-name">
+                DNS Anomaly
+            </span>
+
+            <span
+                class="badge"
+                id="dnsAnomaly">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="security-summary">
+
+            <div class="security-summary-title">
+                Interpretation
+            </div>
+
+            <div
+                class="security-summary-text"
+                id="securitySummary">
+
+                -
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PROTOCOL DISTRIBUTION
+     ===================================================== -->
+
+<div
+    class="panel"
+    style="margin-bottom:22px;">
+
+    <h2 class="panel-title">
+        Protocol Distribution
+    </h2>
+
+    <div class="chart-container">
+
+        <canvas
+            id="protocolChart">
+        </canvas>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SOURCE / DESTINATION
+     ===================================================== -->
+
+<div class="two-equal">
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Top Source IPs
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas
+                id="sourceChart">
+            </canvas>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Top Destination IPs
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas
+                id="destinationChart">
+            </canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TCP / UDP PORT CHARTS
+     ===================================================== -->
+
+<div class="two-equal">
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Top TCP Destination Ports
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas
+                id="tcpPortChart">
+            </canvas>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Top UDP Destination Ports
+        </h2>
+
+        <div class="chart-container">
+
+            <canvas
+                id="udpPortChart">
+            </canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABLES
+     ===================================================== -->
+
+<div class="two-equal">
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Source IP Details
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Rank</th>
+                        <th>Source</th>
+                        <th>Packets</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="sourceTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            Destination IP Details
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Rank</th>
+                        <th>Destination</th>
+                        <th>Packets</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="destinationTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="two-equal">
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            TCP Port Details
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Rank</th>
+                        <th>Port</th>
+                        <th>Packets</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tcpPortTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            UDP Port Details
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Rank</th>
+                        <th>Port</th>
+                        <th>Packets</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="udpPortTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CAPTURE METADATA
+     ===================================================== -->
+
+<div
+    class="panel"
+    style="margin-bottom:22px;">
+
+    <h2 class="panel-title">
+        Capture & Analysis Metadata
+    </h2>
+
+
+    <div class="metadata-grid">
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Capture File
+            </div>
+
+            <div class="metadata-value">
+                traffic_capture.pcapng
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Analysis Mode
+            </div>
+
+            <div class="metadata-value">
+                Offline PCAP analysis
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Primary Tools
+            </div>
+
+            <div class="metadata-value">
+                Wireshark + TShark
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Analyzer
+            </div>
+
+            <div class="metadata-value">
+                C++ Network Traffic Analyzer
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Data Bridge
+            </div>
+
+            <div class="metadata-value">
+                analysis.js
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Dashboard
+            </div>
+
+            <div class="metadata-value">
+                HTML + CSS + JavaScript
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Security Logic
+            </div>
+
+            <div class="metadata-value">
+                Retransmission, reset, port-scan
+                and DNS-volume indicators
+            </div>
+
+        </div>
+
+
+        <div class="metadata-item">
+
+            <div class="metadata-label">
+                Data Status
+            </div>
+
+            <div class="metadata-value">
+                Loaded from C++ analysis output
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="note">
+
+        Detection indicators are investigation signals.
+        They do not by themselves establish malicious
+        activity.
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<div class="footer">
+
+    Network Traffic Analyzer & Security Monitoring Tool
+    <br>
+    C++ • TShark • Wireshark • TCP/IP • HTML • CSS • JavaScript
+
+</div>
+
+
+<!-- =====================================================
+     DASHBOARD JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   DATA CHECK
+   ===================================================== */
+
+if (typeof analysisData === "undefined") {
+
+    alert(
+        "analysis.js could not be loaded. " +
+        "Make sure analysis.js is in the same folder " +
+        "as dashboard.html."
+    );
+
+}
+else {
+
+
+    /* =================================================
+       GLOBAL PRIVACY STATE
+       ================================================= */
+
+    var privacyMode = false;
+
+    var privacyMap = {};
+
+    var privacyCounter = 1;
+
+
+    /* =================================================
+       TEXT HELPERS
+       ================================================= */
+
+    function setText(id, value) {
+
+        var element =
+            document.getElementById(id);
+
+        if (element) {
+            element.textContent = value;
+        }
+
+    }
+
+
+    function percentage(value, total) {
+
+        if (!total || total === 0)
+            return 0;
+
+        return (
+            Number(value) /
+            Number(total)
+        ) * 100;
+
+    }
+
+
+    function setBar(id, value, total) {
+
+        var element =
+            document.getElementById(id);
+
+        if (!element)
+            return;
+
+        var p =
+            percentage(value, total);
+
+        element.style.width =
+            Math.max(0, p).toFixed(1) + "%";
+
+    }
+
+
+    /* =================================================
+       IP DISPLAY FORMATTER
+       ================================================= */
+
+    function isIPAddress(value) {
+
+        if (!value)
+            return false;
+
+        return (
+            value.indexOf(".") !== -1 ||
+            value.indexOf(":") !== -1
+        );
+
+    }
+
+
+    function shortenAddress(value) {
+
+        if (!value)
+            return "-";
+
+
+        if (value.indexOf(":") !== -1) {
+
+            var parts =
+                value.split(":");
+
+
+            if (parts.length > 4) {
+
+                return (
+                    parts[0] +
+                    ":" +
+                    parts[1] +
+                    ":" +
+                    parts[2] +
+                    ":..."
+                );
+
+            }
+
+        }
+
+
+        return value;
+
+    }
+
+
+    function displayAddress(value) {
+
+        if (!value)
+            return "-";
+
+
+        if (!privacyMode)
+            return shortenAddress(value);
+
+
+        if (!privacyMap[value]) {
+
+            privacyMap[value] =
+                "ENDPOINT-" +
+                privacyCounter;
+
+            privacyCounter++;
+
+        }
+
+
+        return privacyMap[value];
+
+    }
+
+
+    /* =================================================
+       PRIVACY MODE
+       ================================================= */
+
+    function togglePrivacyMode() {
+
+        privacyMode =
+            !privacyMode;
+
+
+        var button =
+            document.getElementById(
+                "privacyButton"
+            );
+
+
+        if (privacyMode) {
+
+            button.textContent =
+                "Privacy Mode: ON";
+
+        }
+        else {
+
+            button.textContent =
+                "Privacy Mode: OFF";
+
+        }
+
+
+        refreshTables();
+
+        drawAllCharts();
+
+    }
+
+
+    /* =================================================
+       MAIN COUNTERS
+       ================================================= */
+
+    var total =
+        Number(
+            analysisData.totalPackets
+        );
+
+
+    var tcp =
+        Number(
+            analysisData.tcpPackets
+        );
+
+
+    var udp =
+        Number(
+            analysisData.udpPackets
+        );
+
+
+    var dns =
+        Number(
+            analysisData.dnsPackets
+        );
+
+
+    setText(
+        "totalPackets",
+        total.toLocaleString()
+    );
+
+
+    setText(
+        "tcpPackets",
+        tcp.toLocaleString()
+    );
+
+
+    setText(
+        "udpPackets",
+        udp.toLocaleString()
+    );
+
+
+    setText(
+        "dnsPackets",
+        dns.toLocaleString()
+    );
+
+
+    setText(
+        "indicatorCount",
+        analysisData.securityIndicators
+    );
+
+
+    setText(
+        "tcpPercentage",
+        percentage(tcp, total).toFixed(1)
+        + "% of capture"
+    );
+
+
+    setText(
+        "udpPercentage",
+        percentage(udp, total).toFixed(1)
+        + "% of capture"
+    );
+
+
+    /* =================================================
+       PROTOCOL VALUES
+       ================================================= */
+
+    var protocols =
+        analysisData.protocols;
+
+
+    setText(
+        "tcpProtocolValue",
+        protocols.TCP
+        + " • "
+        + percentage(
+            protocols.TCP,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    setText(
+        "udpProtocolValue",
+        protocols.UDP
+        + " • "
+        + percentage(
+            protocols.UDP,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    setText(
+        "tlsProtocolValue",
+        protocols.TLS
+        + " • "
+        + percentage(
+            protocols.TLS,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    setText(
+        "dnsProtocolValue",
+        protocols.DNS
+        + " • "
+        + percentage(
+            protocols.DNS,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    setText(
+        "httpProtocolValue",
+        protocols.HTTP
+        + " • "
+        + percentage(
+            protocols.HTTP,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    setText(
+        "icmpv6ProtocolValue",
+        protocols.ICMPv6
+        + " • "
+        + percentage(
+            protocols.ICMPv6,
+            total
+        ).toFixed(1)
+        + "%"
+    );
+
+
+    /* =================================================
+       PROTOCOL BARS
+       ================================================= */
+
+    setBar(
+        "tcpBar",
+        protocols.TCP,
+        total
+    );
+
+
+    setBar(
+        "udpBar",
+        protocols.UDP,
+        total
+    );
+
+
+    setBar(
+        "tlsBar",
+        protocols.TLS,
+        total
+    );
+
+
+    setBar(
+        "dnsBar",
+        protocols.DNS,
+        total
+    );
+
+
+    setBar(
+        "httpBar",
+        protocols.HTTP,
+        total
+    );
+
+
+    setBar(
+        "icmpv6Bar",
+        protocols.ICMPv6,
+        total
+    );
+
+
+    /* =================================================
+       SECURITY COUNTERS
+       ================================================= */
+
+    setText(
+        "retransmissions",
+        analysisData.tcpRetransmissions
+    );
+
+
+    setText(
+        "tcpResets",
+        analysisData.tcpResets
+    );
+
+
+    /* =================================================
+       PORT SCAN STATUS
+       ================================================= */
+
+    var portScan =
+        document.getElementById(
+            "portScan"
+        );
+
+
+    if (
+        !analysisData.tcpPortScanAvailable
+    ) {
+
+        portScan.textContent =
+            "N/A";
+
+        portScan.className =
+            "badge badge-info";
+
+    }
+
+    else if (
+        analysisData.tcpPortScanDetected
+    ) {
+
+        portScan.textContent =
+            "DETECTED";
+
+        portScan.className =
+            "badge badge-alert";
+
+    }
+
+    else {
+
+        portScan.textContent =
+            "NONE";
+
+        portScan.className =
+            "badge badge-ok";
+
+    }
+
+
+    /* =================================================
+       DNS STATUS
+       ================================================= */
+
+    var dnsAnomaly =
+        document.getElementById(
+            "dnsAnomaly"
+        );
+
+
+    if (
+        analysisData.dnsAnomalyDetected
+    ) {
+
+        dnsAnomaly.textContent =
+            "DETECTED";
+
+        dnsAnomaly.className =
+            "badge badge-alert";
+
+    }
+
+    else {
+
+        dnsAnomaly.textContent =
+            "NONE";
+
+        dnsAnomaly.className =
+            "badge badge-ok";
+
+    }
+
+
+    /* =================================================
+       SECURITY INTERPRETATION
+       ================================================= */
+
+    var summaryText = "";
+
+
+    if (
+        analysisData.securityIndicators === 0
+    ) {
+
+        summaryText =
+            "No configured security indicators " +
+            "were detected in the analyzed capture.";
+
+    }
+    else {
+
+        summaryText =
+            analysisData.securityIndicators +
+            " configured indicator(s) require " +
+            "review. Retransmissions and resets can " +
+            "occur during normal network operation.";
+
+    }
+
+
+    setText(
+        "securitySummary",
+        summaryText
+    );
+
+
+    /* =================================================
+       TABLE HELPERS
+       ================================================= */
+
+    function fillTable(
+        elementId,
+        data,
+        addressMode
+    ) {
+
+        var tbody =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (!tbody)
+            return;
+
+
+        tbody.innerHTML = "";
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            var emptyRow =
+                document.createElement(
+                    "tr"
+                );
+
+
+            emptyRow.innerHTML =
+                "<td colspan='3'>" +
+                "No data available" +
+                "</td>";
+
+
+            tbody.appendChild(
+                emptyRow
+            );
+
+
+            return;
+        }
+
+
+        var i;
+
+
+        for (
+            i = 0;
+            i < data.length;
+            i++
+        ) {
+
+            var row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            var rank =
+                document.createElement(
+                    "td"
+                );
+
+
+            rank.textContent =
+                i + 1;
+
+
+            var name =
+                document.createElement(
+                    "td"
+                );
+
+
+            if (addressMode) {
+
+                name.textContent =
+                    displayAddress(
+                        data[i].name
+                    );
+
+            }
+            else {
+
+                name.textContent =
+                    data[i].name;
+
+            }
+
+
+            var count =
+                document.createElement(
+                    "td"
+                );
+
+
+            count.textContent =
+                Number(
+                    data[i].count
+                ).toLocaleString();
+
+
+            row.appendChild(rank);
+
+            row.appendChild(name);
+
+            row.appendChild(count);
+
+
+            tbody.appendChild(row);
+
+        }
+
+    }
+
+
+    function refreshTables() {
+
+        fillTable(
+            "sourceTable",
+            analysisData.topSources,
+            true
+        );
+
+
+        fillTable(
+            "destinationTable",
+            analysisData.topDestinations,
+            true
+        );
+
+
+        fillTable(
+            "tcpPortTable",
+            analysisData.topTCPPorts,
+            false
+        );
+
+
+        fillTable(
+            "udpPortTable",
+            analysisData.topUDPPorts,
+            false
+        );
+
+    }
+
+
+    refreshTables();
+
+
+    /* =================================================
+       CANVAS HELPERS
+       ================================================= */
+
+    function getCanvasContext(id) {
+
+        var canvas =
+            document.getElementById(id);
+
+
+        if (!canvas)
+            return null;
+
+
+        var rect =
+            canvas.getBoundingClientRect();
+
+
+        var width =
+            rect.width;
+
+
+        var height =
+            rect.height;
+
+
+        var dpr =
+            window.devicePixelRatio ||
+            1;
+
+
+        canvas.width =
+            Math.max(
+                1,
+                width * dpr
+            );
+
+
+        canvas.height =
+            Math.max(
+                1,
+                height * dpr
+            );
+
+
+        var ctx =
+            canvas.getContext("2d");
+
+
+        ctx.scale(
+            dpr,
+            dpr
+        );
+
+
+        return {
+            ctx: ctx,
+            width: width,
+            height: height
+        };
+
+    }
+
+
+    /* =================================================
+       BAR CHART
+       ================================================= */
+
+    function drawBarChart(
+        canvasId,
+        labels,
+        values
+    ) {
+
+        var chart =
+            getCanvasContext(
+                canvasId
+            );
+
+
+        if (!chart)
+            return;
+
+
+        var ctx =
+            chart.ctx;
+
+
+        var width =
+            chart.width;
+
+
+        var height =
+            chart.height;
+
+
+        ctx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        if (
+            !labels ||
+            labels.length === 0
+        ) {
+
+            ctx.fillStyle =
+                "#6f86aa";
+
+            ctx.font =
+                "14px Arial";
+
+            ctx.fillText(
+                "No data available",
+                20,
+                35
+            );
+
+            return;
+
+        }
+
+
+        var left = 165;
+
+        var right = 55;
+
+        var top = 18;
+
+        var bottom = 20;
+
+
+        if (canvasId === "protocolChart") {
+            left = 105;
+        }
+
+
+        var chartWidth =
+            width -
+            left -
+            right;
+
+
+        var chartHeight =
+            height -
+            top -
+            bottom;
+
+
+        var maxValue =
+            Math.max.apply(
+                null,
+                values
+            );
+
+
+        if (maxValue <= 0)
+            maxValue = 1;
+
+
+        var rowHeight =
+            chartHeight /
+            labels.length;
+
+
+        var barHeight =
+            Math.max(
+                14,
+                rowHeight - 12
+            );
+
+
+        var i;
+
+
+        for (
+            i = 0;
+            i < labels.length;
+            i++
+        ) {
+
+            var y =
+                top +
+                i * rowHeight;
+
+
+            var barWidth =
+                (
+                    Number(values[i]) /
+                    maxValue
+                ) * chartWidth;
+
+
+            /* Background */
+
+            ctx.fillStyle =
+                "#1f2b41";
+
+
+            ctx.fillRect(
+                left,
+                y,
+                chartWidth,
+                barHeight
+            );
+
+
+            /* Foreground */
+
+            ctx.fillStyle =
+                "#63a9ff";
+
+
+            ctx.fillRect(
+                left,
+                y,
+                Math.max(
+                    2,
+                    barWidth
+                ),
+                barHeight
+            );
+
+
+            /* Label */
+
+            ctx.fillStyle =
+                "#dbe7f8";
+
+            ctx.font =
+                "13px Arial";
+
+
+            var label =
+                labels[i];
+
+
+            if (
+                canvasId !== "protocolChart"
+                &&
+                label.length > 23
+            ) {
+
+                label =
+                    label.substring(
+                        0,
+                        23
+                    ) +
+                    "...";
+
+            }
+
+
+            ctx.fillText(
+                label,
+                10,
+                y +
+                barHeight * 0.72
+            );
+
+
+            /* Value */
+
+            ctx.fillStyle =
+                "#91add5";
+
+            ctx.font =
+                "12px Arial";
+
+
+            var valueText =
+                Number(
+                    values[i]
+                ).toLocaleString();
+
+
+            ctx.fillText(
+                valueText,
+                left +
+                barWidth +
+                8,
+                y +
+                barHeight * 0.72
+            );
+
+        }
+
+    }
+
+
+    /* =================================================
+       CHART DATA
+       ================================================= */
+
+    function getIPLabels(data) {
+
+        var result = [];
+
+        var i;
+
+
+        for (
+            i = 0;
+            i < data.length;
+            i++
+        ) {
+
+            result.push(
+                displayAddress(
+                    data[i].name
+                )
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+    function getValues(data) {
+
+        var result = [];
+
+        var i;
+
+
+        for (
+            i = 0;
+            i < data.length;
+            i++
+        ) {
+
+            result.push(
+                Number(
+                    data[i].count
+                )
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+    /* =================================================
+       DRAW ALL CHARTS
+       ================================================= */
+
+    function drawAllCharts() {
+
+
+        /* ---------------------------------------------
+           PROTOCOL
+           --------------------------------------------- */
+
+        var protocolLabels = [
+            "TCP",
+            "UDP",
+            "TLS",
+            "DNS",
+            "HTTP",
+            "ICMPv6"
+        ];
+
+
+        var protocolValues = [
+            Number(protocols.TCP),
+            Number(protocols.UDP),
+            Number(protocols.TLS),
+            Number(protocols.DNS),
+            Number(protocols.HTTP),
+            Number(protocols.ICMPv6)
+        ];
+
+
+        drawBarChart(
+            "protocolChart",
+            protocolLabels,
+            protocolValues
+        );
+
+
+        /* ---------------------------------------------
+           SOURCE IPS
+           --------------------------------------------- */
+
+        var sourceData =
+            analysisData.topSources || [];
+
+
+        drawBarChart(
+            "sourceChart",
+            getIPLabels(sourceData),
+            getValues(sourceData)
+        );
+
+
+        /* ---------------------------------------------
+           DESTINATION IPS
+           --------------------------------------------- */
+
+        var destinationData =
+            analysisData.topDestinations || [];
+
+
+        drawBarChart(
+            "destinationChart",
+            getIPLabels(destinationData),
+            getValues(destinationData)
+        );
+
+
+        /* ---------------------------------------------
+           TCP PORTS
+           --------------------------------------------- */
+
+        var tcpPortData =
+            analysisData.topTCPPorts || [];
+
+
+        var tcpPortLabels = [];
+
+        var tcpPortValues = [];
+
+
+        var i;
+
+
+        for (
+            i = 0;
+            i < tcpPortData.length;
+            i++
+        ) {
+
+            tcpPortLabels.push(
+                "Port " +
+                tcpPortData[i].name
+            );
+
+
+            tcpPortValues.push(
+                Number(
+                    tcpPortData[i].count
+                )
+            );
+
+        }
+
+
+        drawBarChart(
+            "tcpPortChart",
+            tcpPortLabels,
+            tcpPortValues
+        );
+
+
+        /* ---------------------------------------------
+           UDP PORTS
+           --------------------------------------------- */
+
+        var udpPortData =
+            analysisData.topUDPPorts || [];
+
+
+        var udpPortLabels = [];
+
+        var udpPortValues = [];
+
+
+        for (
+            i = 0;
+            i < udpPortData.length;
+            i++
+        ) {
+
+            udpPortLabels.push(
+                "Port " +
+                udpPortData[i].name
+            );
+
+
+            udpPortValues.push(
+                Number(
+                    udpPortData[i].count
+                )
+            );
+
+        }
+
+
+        drawBarChart(
+            "udpPortChart",
+            udpPortLabels,
+            udpPortValues
+        );
+
+    }
+
+
+    drawAllCharts();
+
+
+    /* =================================================
+       REDRAW WHEN WINDOW RESIZES
+       ================================================= */
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            drawAllCharts();
+
+        }
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
